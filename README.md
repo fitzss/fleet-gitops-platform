@@ -12,13 +12,15 @@ A production-ready Kubernetes platform for managing robot fleets using GitOps pr
 - **Security**: Non-root containers with security contexts
 
 ## 📁 Repository Structure
+
+```text
 fleet-gitops-platform/
 ├── services/           # Microservices source code
-│   ├── robot/         # Robot telemetry service
-│   └── monitor/       # Fleet monitoring API
-├── helm/              # Helm chart for deployment
-├── argocd/            # ArgoCD configurations
-└── docs/              # Documentation
+│   ├── robot/          # Robot telemetry service
+│   └── monitor/        # Fleet monitoring API
+├── helm/               # Helm chart for deployment
+├── argocd/             # ArgoCD configurations
+└── docs/               # Documentation
 
 ## 🏗️ Architecture Note
 
