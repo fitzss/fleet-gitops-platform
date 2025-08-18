@@ -1,0 +1,50 @@
+{{- if .Values.robots.enabled }}
+{{- range $i := until (int .Values.robots.count) }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: robot-{{ $i }}
+  labels:
+    app: robot
+    robot-id: "{{ $i }}"
+    component: robot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: robot
+      robot-id: "{{ $i }}"
+  template:
+    metadata:
+      labels:
+        app: robot
+        robot-id: "{{ $i }}"
+        component: robot
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+      containers:
+      - name: robot
+        image: {{ $.Values.robots.image }}
+        imagePullPolicy: {{ $.Values.robots.imagePullPolicy }}
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+        env:
+        - name: ROBOT_ID
+          value: "{{ $i }}"
+        - name: MONITOR_URL
+          value: "http://fleet-monitor:{{ $.Values.monitor.service.port }}"
+        resources:
+          {{- toYaml $.Values.robots.resources | nindent 10 }}
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+{{- end }}
+{{- end }}

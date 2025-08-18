@@ -1,0 +1,120 @@
+{{- if .Values.monitor.enabled }}
+{{- if not .Values.rollout.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fleet-monitor
+  labels:
+    app: fleet-monitor
+    component: monitor
+spec:
+  replicas: {{ .Values.monitor.replicaCount }}
+  selector:
+    matchLabels:
+      app: fleet-monitor
+  template:
+    metadata:
+      labels:
+        app: fleet-monitor
+        component: monitor
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+      containers:
+      - name: monitor
+        image: {{ .Values.monitor.image }}
+        imagePullPolicy: {{ .Values.monitor.imagePullPolicy }}
+        securityContext:
+          runAsUser: 1000
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: {{ .Values.monitor.probes.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.monitor.probes.liveness.periodSeconds }}
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: {{ .Values.monitor.probes.readiness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.monitor.probes.readiness.periodSeconds }}
+        resources:
+          {{- toYaml .Values.monitor.resources | nindent 10 }}
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+{{- else }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: fleet-monitor
+spec:
+  replicas: {{ .Values.monitor.replicaCount }}
+  selector:
+    matchLabels:
+      app: fleet-monitor
+  strategy:
+    blueGreen:
+      activeService: fleet-monitor
+      previewService: fleet-monitor-preview
+      autoPromotionEnabled: true
+      autoPromotionSeconds: {{ .Values.rollout.autoPromotionSeconds }}
+  template:
+    metadata:
+      labels:
+        app: fleet-monitor
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+      containers:
+      - name: monitor
+        image: {{ .Values.monitor.image }}
+        imagePullPolicy: {{ .Values.monitor.imagePullPolicy }}
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+        ports:
+        - name: http
+          containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+        resources:
+          {{- toYaml .Values.monitor.resources | nindent 10 }}
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleet-monitor-preview
+spec:
+  selector:
+    app: fleet-monitor
+  ports:
+  - port: 8000
+    targetPort: http
+{{- end }}
+{{- end }}

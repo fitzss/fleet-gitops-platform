@@ -1,0 +1,14 @@
+pycache/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

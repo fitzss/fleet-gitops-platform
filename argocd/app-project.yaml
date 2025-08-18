@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: fleet-platform
+  namespace: argocd
+spec:
+  description: Fleet Platform Project with governance controls
+  sourceRepos:
+  - https://github.com/fitzss/fleet-gitops-platform
+  destinations:
+  - namespace: 'fleet-site-*'
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  namespaceResourceWhitelist:
+  - group: '*'
+    kind: '*'

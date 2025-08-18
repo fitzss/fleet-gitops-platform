@@ -1,0 +1,10 @@
+# GitOps configuration - managed by CI/CD
+monitor:
+  image: docker.io/fitzdoud/fleet-monitor:v1
+  
+robots:
+  image: docker.io/fitzdoud/fleet-robot:v1
+  count: 3
+
+rollout:
+  enabled: false

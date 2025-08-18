@@ -1,0 +1,41 @@
+# Default values for fleet-platform
+monitor:
+  enabled: true
+  replicaCount: 1
+  image: docker.io/fitzdoud/fleet-monitor:v1
+  imagePullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8000
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  probes:
+    readiness:
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    liveness:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+
+robots:
+  enabled: true
+  count: 3
+  image: docker.io/fitzdoud/fleet-robot:v1
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+rollout:
+  enabled: false
+  strategy: blueGreen
+  autoPromotionSeconds: 30
