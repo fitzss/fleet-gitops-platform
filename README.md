@@ -21,7 +21,7 @@ fleet-gitops-platform/
 ├── helm/               # Helm chart for deployment
 ├── argocd/             # ArgoCD configurations
 └── docs/               # Documentation
-
+```
 ## 🏗️ Architecture Note
 
 For demo clarity, we model robots as individual Deployments. In production, we'd use StatefulSets or dedicated controllers for robot workload management at scale.
