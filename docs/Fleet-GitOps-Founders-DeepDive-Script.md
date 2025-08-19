@@ -8,13 +8,17 @@
 
 ## Why this demo matters (framing, 45–60s)
 
-This demonstration shows a repeatable way to operate a heterogeneous robot fleet with **one Git repository** as the control plane. With a single commit, we can scale a facility, heal unauthorized changes, and deliver zero‑downtime updates. This lines up with FleetGlue’s mission: *deploy faster, integrate multiple robot brands, reduce manual ops and hardware errors, and give customers a single pane of glass.*
+This demo shows a repeatable way to run a mixed-brand robot fleet from a single Git repository that acts as the source of truth. With one commit, we can scale a site, automatically fix any manual changes, and ship updates without downtime. That matches FleetGlue’s goals: deploy faster, plug in robots from different vendors, reduce manual work and errors, and give teams one dashboard to see what’s going on.
 
-**Customer pain we are addressing (assumptions from FleetGlue positioning):**
-- New robots and vendors introduce **fragmented tooling**; every site becomes a snowflake.
-- **Manual deployments** are slow, error‑prone, and hard to audit or roll back.
-- **Downtime** during updates is unacceptable on active floors.
-- Leadership needs **proof of control** (who changed what, when, why) and **recovery** (one‑click rollback).
+### Customer pain:
+
+- New robots come with their own tools, so every site ends up a little different and hard to support.
+
+- Manual deployments are slow, error-prone, and hard to audit or roll back.
+
+- Updates can’t interrupt active operations.
+
+- Leaders need proof of control (who changed what, when, why) and fast, safe rollback.
 
 **Outcomes to highlight:**
 - 3× faster deployments → change is a reviewed commit, not a long runbook.
