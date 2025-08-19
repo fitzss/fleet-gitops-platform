@@ -2,35 +2,31 @@
 
 ---
 
-## Big-picture
+# Demo Introduction (30–45s)
 
-- What you’re about to see: a small but complete pipeline that mirrors how FleetGlue customers can deploy and operate robots in production—using Git as the single source of truth.
-- Why this matters to FleetGlue: your platform promises “faster deployments, less downtime, vendor-agnostic control.” GitOps + Helm + Argo CD are the machinery that makes those claims repeatable and auditable.
-- How to watch the demo: look for proof points—a single commit scales capacity, manual drift gets fixed automatically, updates don’t interrupt service, and rollback is instant.
+**What this proves:** With a single Git repository, I can operate a mixed-brand robot fleet across multiple sites. A single commit scales capacity, unauthorized changes are auto-corrected, and updates ship with zero downtime—all with full auditability and instant rollback.
 
+**Why it matters to FleetGlue:** This demonstrates the machinery behind your promises—faster deployments, less downtime, vendor-agnostic control—delivered from day one, not just at scale (using GitOps, Helm, and Argo CD).
 
----
+**Customer pains I’m addressing:**
 
-## Why this demo matters (framing, 45–60s)
+- Every new robot/vendor brings different tools, so each site drifts and becomes hard to support.  
+- Manual, one-off deployments are slow, error-prone, and hard to audit or roll back.  
+- Updates can’t interrupt active operations.  
+- Leadership needs visibility: “who changed what, when, why,” plus safe, fast rollback.  
 
-This demo shows a repeatable way to run a mixed-brand robot fleet from a single Git repository that acts as the source of truth. With one commit, we can scale a site, automatically fix any manual changes, and ship updates without downtime. That matches FleetGlue’s goals: deploy faster, plug in robots from different vendors, reduce manual work and errors, and give teams one dashboard to see what’s going on.
+**Outcomes I will demonstrate live (not just claim):**
 
-### Customer pain:
+- **Speed:** Change is a reviewed Git commit, not a runbook.  
+- **Quality:** Drift auto-corrects; changes are templated and auditable.  
+- **Vendor-agnostic:** Swap robot images/adapters, keep the same pipeline.  
+- **Zero downtime:** Progressive rollout gates promotion on health.  
+- **Instant recovery:** Revert the commit; the system reconciles safely.  
 
-- New robots come with their own tools, so every site ends up a little different and hard to support.
+**How to watch:** Look for four proof points—(1) commit → scale up, (2) manual drift → auto-heal, (3) APIs/metrics live across sites, (4) update → zero downtime → rollback.  
 
-- Manual deployments are slow, error-prone, and hard to audit or roll back.
+**Transition:** “With that frame, I’ll spin up the environment and show those four proof points end-to-end.”  
 
-- Updates can’t interrupt active operations.
-
-- Leaders need proof of control (who changed what, when, why) and fast, safe rollback.
-
-**Outcomes to highlight:**
-- 3× faster deployments → change is a reviewed commit, not a long runbook.
-- 70% fewer errors → drift auto‑corrects, changes are templated and auditable.
-- Vendor‑agnostic control plane → swap robot images/adapters, keep the same pipeline.
-- Zero‑downtime updates → Argo Rollouts gates promotion on health.
-- Immediate rollback → revert the commit, system reconciles safely.
 
 ---
 
