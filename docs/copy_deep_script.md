@@ -76,19 +76,19 @@ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 # 1) Clone repo
 git clone https://github.com/fitzss/fleet-gitops-platform.git
 cd fleet-gitops-platform
-- The repo is the *product truth*. Everything lives here, so changes are reviewable and reversible.  
+*The repo is the *product truth*. Everything lives here, so changes are reviewable and reversible.*
 
 # 2) Create a Kubernetes‑in‑Docker cluster
 kind create cluster --name fleet-demo --image kindest/node:v1.30.2
-- Kind spins up a disposable local cluster. Customers may use cloud/on-prem, but workflow stays identical.  
+*Kind spins up a disposable local cluster. Customers may use cloud/on-prem, but workflow stays identical.* 
 
 # 3) Install Argo CD + the apps (uses public images)
 make bootstrap-argocd
-- Argo CD installs and registers the apps. From now on, clusters follow Git—no hand edits.  
+*Argo CD installs and registers the apps. From now on, clusters follow Git—no hand edits.* 
 
 # 4) Wait for apps to sync (until all three are Synced/Healthy)
 kubectl get applications -n argocd -w
-- When apps show Synced/Healthy, we know cluster = Git. That’s our baseline.  
+*When apps show Synced/Healthy, we know cluster = Git. That’s our baseline.*
 
 ```
 
