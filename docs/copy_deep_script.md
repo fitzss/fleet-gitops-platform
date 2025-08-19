@@ -161,6 +161,25 @@ kubectl get pods -n fleet-site-a -o wide
 Pods are Running; the monitor is a ClusterIP on port 8000. We will port‑forward to reach the REST/metrics APIs.
 
 ---
+## Baseline Reset (run before scaling step)
+
+This ensures Site A starts at 3 robots before the demo, avoiding “nothing to commit” errors.
+
+```bash
+sed -i 's/^\(\s*count:\s*\).*/\1 3/' helm/values-site-a.yaml ||   sed -i '' 's/^\(\s*count:\s*\).*/\1 3/' helm/values-site-a.yaml
+
+git add helm/values-site-a.yaml
+git commit -m "Baseline: Site A at 3 robots" || true
+git push || true
+
+# Refresh & sync immediately
+kubectl -n argocd annotate application fleet-site-a argocd.argoproj.io/refresh=hard --overwrite
+kubectl -n argocd patch application fleet-site-a --type merge -p '{"operation":{"sync":{}}}'
+
+# Watch it settle
+kubectl get applications -n argocd -w
+```
+---
 
 ## Founder demo — UI‑first, business‑centric flow
 
@@ -181,27 +200,30 @@ Argo CD UI `https://localhost:8080` (admin / password from the command). Set aut
 
 **Why buyers care:** Lower **time‑to‑deploy** for new facilities; standardization reduces **support load** and **training cost**.
 
+
 ---
 
 ### 2) Scale a facility via Git (≈2–3 min)
 
 **GitHub UI path:** edit `helm/values-site-a.yaml`, change `count: 3` → `count: 10`, commit “Scale Site A to 10 robots for increased capacity”.  
+
 **Terminal path:**
 
 ```bash
-make demo-scale
-# or
-sed -i 's/count: 3/count: 10/' helm/values-site-a.yaml
+sed -i 's/^\(\s*count:\s*\).*/\1 10/' helm/values-site-a.yaml ||   sed -i '' 's/^\(\s*count:\s*\).*/\1 10/' helm/values-site-a.yaml
+
 git commit -am "Scale Site A to 10 robots" && git push
 ```
 
-**What unfolds in Argo CD:** the **fleet-site-a** card transitions **Synced → OutOfSync → Progressing → Synced**; Tree view shows `robot-3 … robot-9` appearing as reconciliation proceeds.
+**What unfolds in Argo CD:** the **fleet-site-a** card transitions Synced → OutOfSync → Progressing → Synced; Tree view shows `robot-3 … robot-9` appearing as reconciliation proceeds.
 
 **Business translation:** Scaling is a **reviewable commit**, not a risky shell session. It leaves an audit trail, enables approvals, and is reversible. This is how to achieve **3× faster deployments** with **fewer mistakes**.
 
 **If timing lags:** force a refresh safely:
+
 ```bash
 kubectl -n argocd annotate application fleet-site-a argocd.argoproj.io/refresh=hard --overwrite
+```
 ```
 
 ---
